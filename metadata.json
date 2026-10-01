@@ -1,0 +1,5 @@
+{
+  "name": "Chatly",
+  "description": "Directorio de grupos de WhatsApp por tema y país. Únete en un toque o publica tu grupo gratis.",
+  "capabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
