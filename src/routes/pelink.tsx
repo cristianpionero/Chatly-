@@ -138,62 +138,61 @@ function PelinkPage() {
 
         <hr className="border-border/60" />
 
-        {/* 3. Qué detecta en tiempo real */}
-        <section className="space-y-3">
-          <div className="flex items-center gap-2 text-brand">
-            <Zap className="h-4.5 w-4.5" />
+        {/* 3. Política de Cero Tolerancia y Ciclo de 24 Horas */}
+        <section className="space-y-4">
+          <div className="flex items-center gap-2 text-rose-500">
+            <AlertTriangle className="h-4.5 w-4.5" />
             <h2 className="font-display text-base font-bold text-foreground">
-              ¿Qué analiza Pelink apenas se publica o actualiza un grupo?
+              Política de Cero Tolerancia y Ciclo de 24 Horas
             </h2>
           </div>
           <p className="text-muted-foreground leading-relaxed">
-            Apenas un creador registra su grupo en Chatly o modifica sus datos, Pelink ejecuta una
-            serie de validaciones en cuestión de segundos:
+            Para garantizar que Chatly nunca se llene de enlaces fraudulentos, grupos vacíos o
+            trampas de creadores que publican un enlace para cambiarlo minutos después, Pelink opera
+            bajo reglas estrictas e inapelables:
           </p>
 
           <div className="grid gap-3 pt-1">
-            <div className="rounded-2xl border border-border/80 bg-surface/70 p-4 space-y-1">
-              <div className="flex items-center gap-2 font-display text-xs font-bold text-foreground">
-                <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                Vigencia del enlace
+            <div className="rounded-2xl border border-rose-500/20 bg-rose-500/5 p-4 space-y-1.5">
+              <div className="flex items-center gap-2 font-display text-xs font-bold text-rose-600 dark:text-rose-400">
+                <CheckCircle2 className="h-4 w-4" />
+                Cero tolerancia al publicar (Revisión instantánea)
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Confirma que el enlace de invitación esté activo y no haya sido anulado por el
-                creador dentro de WhatsApp.
+                Apenas se pulsa «Publicar grupo», Pelink revisa el enlace de forma inmediata. Si el
+                enlace está caído, revocado, no corresponde a un grupo real de WhatsApp o fue
+                cambiado desde el inicio, se considera una falta de respeto al directorio:
+                <strong> el grupo es rechazado y eliminado permanentemente de inmediato</strong> de
+                la base de datos para no almacenar basura.
               </p>
             </div>
 
-            <div className="rounded-2xl border border-border/80 bg-surface/70 p-4 space-y-1">
-              <div className="flex items-center gap-2 font-display text-xs font-bold text-foreground">
-                <AlertTriangle className="h-4 w-4 text-amber-500" />
-                Detección de enlaces expirados o cambiados
+            <div className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4 space-y-1.5">
+              <div className="flex items-center gap-2 font-display text-xs font-bold text-amber-600 dark:text-amber-400">
+                <RefreshCw className="h-4 w-4" />
+                Revisión rutinaria cada 24 horas (Ventana estricta de 1 hora)
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Si un administrador pulsa «Restablecer enlace» en los ajustes de WhatsApp, el enlace
-                anterior expira. Pelink detecta este cambio para avisar al dueño y permitir su
-                renovación.
+                Pelink barre todos los grupos del catálogo en un ciclo automático de 24 horas. Si en
+                su revisión detecta que un creador modificó, restableció o dejó caer el enlace
+                después de haberlo publicado, el sistema le otorga una ventana máxima de
+                <strong> 1 sola hora</strong> para solucionarlo. Si en ese plazo no es actualizado,
+                el grupo se elimina permanentemente de la base de datos sin contemplaciones.
               </p>
             </div>
 
-            <div className="rounded-2xl border border-border/80 bg-surface/70 p-4 space-y-1">
-              <div className="flex items-center gap-2 font-display text-xs font-bold text-foreground">
-                <ShieldCheck className="h-4 w-4 text-brand" />
-                Grupos inexistentes o eliminados
+            <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-4 space-y-1.5">
+              <div className="flex items-center gap-2 font-display text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                <Zap className="h-4 w-4" />
+                Auditoría comunitaria instantánea (Regla de los 2 reportes)
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Si el grupo fue cerrado o disuelto por los moderadores, Pelink lo marca de inmediato
-                para evitar que usuarios ingresen a salas inactivas.
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-border/80 bg-surface/70 p-4 space-y-1">
-              <div className="flex items-center gap-2 font-display text-xs font-bold text-foreground">
-                <RefreshCw className="h-4 w-4 text-blue-500" />
-                Prevención de duplicados
-              </div>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                Revisa que el mismo enlace de WhatsApp no esté duplicado en múltiples publicaciones,
-                garantizando un catálogo ordenado y sin spam.
+                En cada ficha de grupo, discretamente integrado junto a la descripción, los
+                visitantes cuentan con un enlace verde que indica <em>«caído»</em>. Cuando dos
+                usuarios reportan que un grupo no funciona,{" "}
+                <strong>Pelink entra a auditarlo de manera inmediata</strong> sin esperar el ciclo
+                de 24 horas. Si corrobora que el enlace no sirve, procede a su eliminación
+                definitiva en el acto.
               </p>
             </div>
           </div>
@@ -201,30 +200,60 @@ function PelinkPage() {
 
         <hr className="border-border/60" />
 
-        {/* 4. ¿Qué hacer si tu enlace expiró o cambió? El PIN de 15 dígitos */}
-        <section className="space-y-3">
-          <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400">
+        {/* 4. Advertencia a los administradores: Su poder es el PIN de 15 dígitos */}
+        <section className="space-y-4">
+          <div className="flex items-center gap-2 text-brand">
             <KeyRound className="h-4.5 w-4.5" />
             <h2 className="font-display text-base font-bold text-foreground">
-              ¿Tu enlace cambió o expiró? Solución rápida con tu PIN
+              Advertencia a creadores: Tienen un poder más que nosotros (Su PIN)
+            </h2>
+          </div>
+          <div className="rounded-2xl border border-brand/20 bg-brand/5 p-4 space-y-2">
+            <p className="font-display text-xs font-bold text-brand">
+              ⚠️ Aviso importante a los administradores de salas
+            </p>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Ustedes como creadores cuentan con una herramienta que nosotros no podemos gestionar
+              por ustedes: <strong>su clave PIN única de 15 dígitos</strong> y su enlace privado de
+              administración. Con ese PIN tienen el poder exclusivo de cambiar, reparar y reactivar
+              el enlace de su comunidad en segundos desde cualquier dispositivo.
+            </p>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Si tu enlace en WhatsApp cambia o se restablece, no esperes a que los usuarios lo
+              reporten o a que Pelink lo elimine. Entra de inmediato con tu PIN, actualiza el enlace
+              y tu grupo mantendrá su lugar y visibilidad. Si descuidas tu comunidad, el bot actuará
+              con tolerancia cero.
+            </p>
+          </div>
+        </section>
+
+        <hr className="border-border/60" />
+
+        {/* 5. ¿Qué hacer si tu enlace expiró o cambió? El PIN de 15 dígitos */}
+        <section className="space-y-3">
+          <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400">
+            <ShieldCheck className="h-4.5 w-4.5" />
+            <h2 className="font-display text-base font-bold text-foreground">
+              ¿Cómo usar tu PIN para cambiar el enlace al instante?
             </h2>
           </div>
           <p className="text-muted-foreground leading-relaxed">
-            Si cambiaste el enlace de tu grupo en WhatsApp o si Pelink detecta que tu enlace
-            anterior ya está registrado, no tienes que empezar de cero ni perder la visibilidad de
-            tu comunidad.
+            Si restableciste el enlace de tu grupo en WhatsApp o deseas apuntar a una nueva sala, no
+            tienes que perder tu posición ni tu audiencia:
           </p>
-          <p className="text-muted-foreground leading-relaxed">
-            Cada grupo cuenta con una <strong>clave / PIN de 15 dígitos</strong> asignada al momento
-            de crearlo. Al intentar registrar tu nuevo enlace, cuando el sistema te avise que el
-            grupo ya existe, puedes tocar en <strong>«aquí»</strong> para abrir el formulario de
-            cambio rápido. Al ingresar tu PIN de 15 dígitos y el nuevo enlace, Pelink lo comprueba y
-            republica tu grupo con la información actualizada al instante.
-          </p>
-          <p className="text-muted-foreground leading-relaxed">
-            También puedes gestionarlo desde tu <strong>enlace privado de administración</strong> si
-            lo conservas.
-          </p>
+          <ol className="list-decimal list-inside space-y-1.5 text-xs text-muted-foreground pl-1">
+            <li>
+              Al intentar publicar el nuevo enlace, el sistema te avisará si detecta tu grupo y te
+              permitirá tocar en <strong>«aquí»</strong> para cambio rápido.
+            </li>
+            <li>
+              Ingresas tu <strong>PIN de 15 dígitos</strong> y el nuevo enlace oficial de WhatsApp.
+            </li>
+            <li>
+              Pelink lo valida en el instante y republica tu grupo con la información actualizada
+              sin interrupciones.
+            </li>
+          </ol>
         </section>
 
         <hr className="border-border/60" />

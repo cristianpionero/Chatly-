@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Users } from "lucide-react";
 import { modeLogo } from "@/components/ModeSwitcher";
 import type { AppMode } from "@/lib/app-mode";
@@ -7,6 +7,7 @@ import { evaluarAcceso } from "@/lib/security";
 import { useGuest, usuarioSeguro } from "@/lib/guest";
 import { useProfile } from "@/lib/app-settings";
 import { useI18n } from "@/lib/i18n";
+import { reportarGrupoCaido, ejecutarRevisionRutinaria } from "@/lib/pelink-bot";
 
 /**
  * Lista de grupos del modo WhatsApp con diseño en línea limpia.
@@ -19,12 +20,29 @@ export function ModeGroupList({ groups, mode }: { groups: ModeGroup[]; mode: App
   const { t, tCategory, tCountry, lang } = useI18n();
   const [joining, setJoining] = useState<ModeGroup | null>(null);
   const [showFullDesc, setShowFullDesc] = useState(false);
+  const [reportedGroups, setReportedGroups] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    // Pelink ejecuta su verificación rutinaria silenciosa de 24h
+    void ejecutarRevisionRutinaria();
+  }, []);
 
   if (mode !== "whatsapp") return null;
   const providerName = "WhatsApp";
 
   const description = joining?.rules?.trim() || t("noDescription");
   const isLongDescription = description.length > 100;
+  const isReported = Boolean(joining && reportedGroups[joining.id]);
+
+  const handleReportar = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!joining || isReported) return;
+    setReportedGroups((prev) => ({ ...prev, [joining.id]: true }));
+    const res = await reportarGrupoCaido(joining.id, joining.link);
+    if (res.eliminado) {
+      setJoining(null);
+    }
+  };
 
   return (
     <>
@@ -104,9 +122,27 @@ export function ModeGroupList({ groups, mode }: { groups: ModeGroup[]; mode: App
                     >
                       {showFullDesc ? t("seeLess") : t("seeMore")}
                     </button>
+                    <button
+                      type="button"
+                      onClick={handleReportar}
+                      disabled={isReported}
+                      className="ml-2 inline font-medium text-[0.72rem] text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 underline underline-offset-2 decoration-emerald-500/40 hover:decoration-emerald-500 cursor-pointer transition-colors disabled:opacity-60 disabled:cursor-default"
+                    >
+                      {isReported ? t("reported") : t("linkBrokenQuestion")}
+                    </button>
                   </>
                 ) : (
-                  description
+                  <>
+                    <span>{description}</span>
+                    <button
+                      type="button"
+                      onClick={handleReportar}
+                      disabled={isReported}
+                      className="ml-2 inline font-medium text-[0.72rem] text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 underline underline-offset-2 decoration-emerald-500/40 hover:decoration-emerald-500 cursor-pointer transition-colors disabled:opacity-60 disabled:cursor-default"
+                    >
+                      {isReported ? t("reported") : t("linkBrokenQuestion")}
+                    </button>
+                  </>
                 )}
               </p>
             </div>

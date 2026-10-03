@@ -88,3 +88,11 @@ export function canEditRoom(roomId: string, uid?: string): boolean {
   if (!room?.adminId) return true;
   return Boolean(uid) && room.adminId === uid;
 }
+
+/** Elimina un grupo de la caché local de salas. */
+export function deleteCreatedRoom(id: string) {
+  if (typeof window === "undefined") return;
+  const next = readCreatedRooms().filter((r) => r.id !== id);
+  window.localStorage.setItem(KEY, JSON.stringify(next));
+  emitRoomsChanged();
+}

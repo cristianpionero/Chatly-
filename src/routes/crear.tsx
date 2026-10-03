@@ -23,6 +23,7 @@ import { useProfile, saveProfile } from "@/lib/app-settings";
 import { useAppMode } from "@/lib/app-mode";
 import { useI18n } from "@/lib/i18n";
 import { ProviderLogo } from "@/components/ProviderLogo";
+import { verificarGrupoAlPublicar } from "@/lib/pelink-bot";
 import { getOrCreateDeviceId } from "@/lib/local-auth";
 import { registrarUsuario } from "@/lib/db/usuarios";
 
@@ -279,6 +280,18 @@ function CrearChat() {
 
     void (async () => {
       try {
+        // Pelink: Auditoría inmediata de enlace. Cero tolerancia con enlaces rotos o no oficiales
+        for (const p of added) {
+          const check = verificarGrupoAlPublicar(p.link);
+          if (!check.valido) {
+            setPublishing(false);
+            return setError(
+              check.error ||
+                "Pelink detectó que el enlace no pertenece a un grupo activo de WhatsApp. Corrige el enlace para continuar.",
+            );
+          }
+        }
+
         const deviceUid = profile.uid || getOrCreateDeviceId();
 
         // 1. Registrar usuario y su país de origen en Supabase y localmente

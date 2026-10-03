@@ -1,4 +1,4 @@
-import { emitRoomsChanged, type CreatedRoom } from "@/lib/created-rooms";
+import { emitRoomsChanged, deleteCreatedRoom, type CreatedRoom } from "@/lib/created-rooms";
 import type { SeguridadAvanzada } from "@/lib/security";
 import { readTable, writeTable, newId } from "@/lib/db/store";
 import { supabase } from "@/lib/supabase";
@@ -30,7 +30,7 @@ export type DbGrupo = {
 
 const COL = "grupos";
 
-function localGrupos() {
+export function localGrupos() {
   return readTable<DbGrupo>(COL);
 }
 
@@ -528,4 +528,34 @@ export async function actualizarGrupoPorPin(pin: string, nuevoLink: string): Pro
   }
 
   return grupoToRoom(grupoActualizado);
+}
+
+/**
+ * Elimina un grupo de forma permanente y definitiva del sistema:
+ * - Se elimina de la base de datos local (localStorage).
+ * - Se elimina de la caché de created-rooms.
+ * - Se elimina de Supabase.
+ * Cero tolerancia con enlaces rotos o modificados.
+ */
+export async function eliminarGrupoPermanente(id: string): Promise<void> {
+  if (!id) return;
+
+  // 1. Eliminar de la tabla local en localStorage
+  const rows = localGrupos().filter((r) => r.id !== id);
+  writeTable(COL, rows);
+
+  // 2. Eliminar de created-rooms
+  deleteCreatedRoom(id);
+
+  // 3. Eliminar de Supabase
+  try {
+    const { error } = await supabase.from("groups").delete().eq("id", id);
+    if (error) {
+      console.warn("Error eliminando grupo en Supabase:", error);
+    }
+  } catch (err) {
+    console.warn("Excepción eliminando grupo en Supabase:", err);
+  }
+
+  emitRoomsChanged();
 }
